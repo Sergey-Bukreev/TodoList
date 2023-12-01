@@ -1,46 +1,38 @@
 import React from 'react';
-import {Button} from "./Button";
-type TodoListPropsType = {
-    title: string
-    task: Array<TaskType>
-}
 
-export type TaskType ={
-    id: number
-    title: string
-    isDone: boolean
-}
+import {ToDoCard} from "./ToDoCard";
+const TodoCardData = [
+    {
+        title: "What to learn",
+        task:[
+            {id:1, title:"HTML", isDone:true},
+            {id:2, title:"JS/ES6", isDone:true},
+            {id:3, title:"React", isDone:true}
+        ],
 
-export const TodoList:React.FC<TodoListPropsType> = ({title, task}) =>
-{
 
-    const listItems:Array<JSX.Element> = []
+    },
+    {
+        title: "What to by",
+        task:[
+            {id:1, title:"Bear", isDone:true},
+            {id:2, title:"Cheeps", isDone:true},
+            {id:3, title:"Dry Fish", isDone:true}
+        ],
 
-    for (let i=0; i < task.length; i++) {
-       const listItem:JSX.Element =
-        <li>
-            <input type="checkbox" checked={task[i].isDone}/>
-            <span>{task[i].title}</span>
-        </li>
-        listItems.push(listItem)
     }
+]
 
+ export const TodoList:React.FC = () => {
     return (
-        <div className={"todoList"}>
-            <h3>{title}</h3>
-            <div>
-                <input/>
-                <Button name={"+"} />
-            </div>
-            <ul>
-                {listItems}
-            </ul>
-            <div>
-                <Button name={"ALL"} />
-                <Button name={"active"} />
-                <Button name={"Completed"} />
-            </div>
-        </div>
-    );
+            <>
+                {TodoCardData.map((el)=> <ToDoCard title={el.title} task={el.task} key={el.title} />)}
+            </>
+    )
 };
+
+
+
+
+
 

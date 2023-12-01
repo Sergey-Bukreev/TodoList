@@ -1,6 +1,6 @@
 import React from 'react';
 
-type ButtonPropsType = {
+ export type ButtonPropsType = {
     name: string
 }
 export const Button:React.FC<ButtonPropsType> = (props) => {
