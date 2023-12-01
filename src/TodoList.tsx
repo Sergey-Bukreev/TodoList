@@ -1,22 +1,44 @@
 import React from 'react';
+import {Button} from "./Button";
+type TodoListPropsType = {
+    title: string
+    task: Array<TaskType>
+}
 
-export const TodoList = () => {
+export type TaskType ={
+    id: number
+    title: string
+    isDone: boolean
+}
+
+export const TodoList:React.FC<TodoListPropsType> = ({title, task}) =>
+{
+
+    const listItems:Array<JSX.Element> = []
+
+    for (let i=0; i < task.length; i++) {
+       const listItem:JSX.Element =
+        <li>
+            <input type="checkbox" checked={task[i].isDone}/>
+            <span>{task[i].title}</span>
+        </li>
+        listItems.push(listItem)
+    }
+
     return (
         <div className={"todoList"}>
-            <h3>What to learn</h3>
+            <h3>{title}</h3>
             <div>
                 <input/>
-                <button>+</button>
+                <Button name={"+"} />
             </div>
             <ul>
-                <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                <li><input type="checkbox" checked={false}/> <span>React</span></li>
+                {listItems}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <Button name={"ALL"} />
+                <Button name={"active"} />
+                <Button name={"Completed"} />
             </div>
         </div>
     );
