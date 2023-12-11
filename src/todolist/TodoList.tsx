@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {ToDoCard} from "./todocard/ToDoCard";
-const TodoCardData = [
+let TodoCardData = [
     {
         id:1,
         title: "What to learn",
@@ -25,10 +25,32 @@ const TodoCardData = [
     }
 ]
 
- export const TodoList:React.FC = () => {
+
+
+export const TodoList: React.FC = () => {
+    let [tasks, setTasks] = useState(TodoCardData);
+
+    const removeTask = (cardId: number, taskId: number) => {
+        const updatedTasks = tasks.map((el) => {
+            if(cardId === el.id) {
+
+                const updatedTask = el.task.filter((task) => task.id !== taskId);
+                return { ...el, task: updatedTask };
+            }
+            return el
+
+        });
+
+        setTasks(updatedTasks);
+    }
+
     return (
             <>
-                {TodoCardData.map((el)=> <ToDoCard title={el.title} tasks={el.task} key={el.id} />)}
+                {tasks.map((el)=> <ToDoCard title={el.title}
+                                                                            task={el.task}
+                                                                            id={el.id}
+                                                                            key={el.id}
+                                                                            removeTask={(tasks) => removeTask(el.id,tasks)}/>)}
             </>
     )
 };

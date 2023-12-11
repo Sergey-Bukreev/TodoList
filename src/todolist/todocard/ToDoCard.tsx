@@ -2,13 +2,15 @@ import React from 'react';
 import { Button } from "../../components/Button";
 import {TasksList, TaskType} from "./TasksList";
 
-type TodoCardPropsType = {
+export type TodoCardPropsType = {
     title: string;
-    tasks: Array<TaskType>;
+    task: Array<TaskType>;
+    id:number
+    removeTask: (id: number) => void;
 };
 
 
-export const ToDoCard: React.FC<TodoCardPropsType> = ({ title, tasks }) => {
+export const ToDoCard: React.FC<TodoCardPropsType> = ({ title, task,removeTask }) => {
     return (
         <div className={"todoList"}>
             <h3>{title}</h3>
@@ -16,7 +18,7 @@ export const ToDoCard: React.FC<TodoCardPropsType> = ({ title, tasks }) => {
                 <input />
                 <Button name={"+"} />
             </div>
-            <TasksList tasks={tasks} />
+            <TasksList tasks={task} removeTask={removeTask} />
             <div>
                 <Button name={"ALL"} />
                 <Button name={"active"} />

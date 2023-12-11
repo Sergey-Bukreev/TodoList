@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
 import { TodoList} from "./todolist/TodoList";
+import {TodoCardPropsType} from "./todolist/todocard/ToDoCard";
 
 
-
-
-function App() {
+const App = () => {
 
     return (
         <div className="App">
