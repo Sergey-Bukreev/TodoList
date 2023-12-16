@@ -1,14 +1,16 @@
 import React from 'react';
-import {FilterValuesType} from "../todolist/TodoList";
+import {FilterValuesType} from "../todolists/TodoLists";
 
  export type ButtonPropsType = {
     name: string
-     changeFilter?: (value:FilterValuesType) => void;
+     callBack:() => void
 }
 export const Button:React.FC<ButtonPropsType> = (props) => {
-
+let onClickHandler = () => {
+    props.callBack()
+}
     return (
-        <button>{props.name}</button>
+        <button onClick={onClickHandler}>{props.name}</button>
     );
 };
 
