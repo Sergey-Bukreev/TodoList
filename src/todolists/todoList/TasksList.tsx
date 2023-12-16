@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 
 
 
@@ -11,15 +11,21 @@ export type TaskType = {
 export type TaskListPropsType = {
     tasks: Array<TaskType>;
     removeTask: (id: string) => void;
+    changeStatus: (isDone: boolean, taskId: string)=> void
 
 };
 
- export const TasksList: React.FC<TaskListPropsType> = ({ tasks,removeTask }) => {
+ export const TasksList: React.FC<TaskListPropsType> = ({ tasks,removeTask, changeStatus }) => {
+     let  onChangeStatusHandler=(task:TaskType)=> {
+         changeStatus(!task.isDone, task.id);
+     }
     return (
         <ul>
             {tasks.map((task:TaskType) => (
                 <li key={task.id}>
-                    <input type="checkbox" checked={task.isDone} />
+                    <input type="checkbox"
+                           checked={task.isDone}
+                            onChange={()=>onChangeStatusHandler(task)}/>
                     <span>{task.title}</span>
                     <button onClick={()=> removeTask(task.id)}> x </button>
                 </li>

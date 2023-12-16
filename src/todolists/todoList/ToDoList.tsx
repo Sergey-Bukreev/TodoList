@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import { Button } from "../../components/Button";
 import {TasksList, TaskType} from "./TasksList";
 import {FilterValuesType} from "../TodoLists";
@@ -10,25 +10,35 @@ export type TodoCardPropsType = {
     removeTask: (id: string) => void;
     changeFilter: (value:FilterValuesType) => void;
     addTask:(title:string) => void
+    changeStatus: (isDone: boolean, taskId: string)=> void
 };
 
 
-export const ToDoList: React.FC<TodoCardPropsType> = ({ title, task,removeTask, changeFilter, addTask, }) => {
+export const ToDoList: React.FC<TodoCardPropsType> = ({ title, task,removeTask, changeFilter, addTask, changeStatus }) => {
     const [newTaskTitle, setNewTaskTitle] = useState("");
 
     const handleAddTask = () => {
         addTask(newTaskTitle);
-        setNewTaskTitle(''); // Очистить значение инпута после добавления задачи
+        setNewTaskTitle('');
     };
+    const onNewTitleChangeHandler=(e:ChangeEvent<HTMLInputElement>)=> {
+        setNewTaskTitle(e.currentTarget.value)
+    }
+    const onKeyPressHandler =(e:KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === "Enter") {handleAddTask()}
+    }
+
 
     return (
         <div className={"todoList"}>
             <h3>{title}</h3>
             <div>
-                <input value={newTaskTitle} onChange={(e)=>setNewTaskTitle(e.currentTarget.value)}/>
-                <Button name={"+"}  callBack={()=>handleAddTask() } />
+                <input value={newTaskTitle}
+                       onChange={onNewTitleChangeHandler}
+                        onKeyDown={onKeyPressHandler}/>
+                <Button name={"+"}  callBack={handleAddTask} />
             </div>
-            <TasksList tasks={task} removeTask={removeTask} />
+            <TasksList tasks={task} removeTask={removeTask} changeStatus={changeStatus} />
             <div>
                 <Button name={"All"} callBack={()=>changeFilter("all")}/>
                 <Button name={"Active"} callBack={()=>changeFilter("active")}/>
