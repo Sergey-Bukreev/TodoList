@@ -22,7 +22,7 @@ export type TaskListPropsType = {
     return (
         <ul>
             {tasks.map((task:TaskType) => (
-                <li key={task.id}>
+                <li key={task.id} className={task.isDone? "is-done" : ""}>
                     <input type="checkbox"
                            checked={task.isDone}
                             onChange={()=>onChangeStatusHandler(task)}/>

@@ -72,7 +72,7 @@
                 if(todoListId === el.id) {
                     let updateStatusTaskList = el.taskList.map((el)=>{
                         if(taskId===el.id){
-                          return   {...el, isDone:isDone}
+                          return   {...el, isDone}
                         }
                         return el
                     })
@@ -108,7 +108,7 @@
                             changeFilter={(value:FilterValuesType) => changeFilter(value, el.id)}
                             addTask={(title:string) => addTask(title, el.id)}
                             changeStatus={(isDone: boolean, taskId: string) => changeStatus(el.id, isDone, taskId)}
-                        />
+                            activeFilter={filter} />
                     );
                 })}
             </>
