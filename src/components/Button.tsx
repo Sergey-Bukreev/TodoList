@@ -1,5 +1,5 @@
 import React from 'react';
-import {FilterValuesType} from "../todolists/TodoLists";
+
 
  export type ButtonPropsType = {
     name: string
