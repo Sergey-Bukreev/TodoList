@@ -1,6 +1,7 @@
-import React, {ChangeEvent,  useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from "../App";
 import {Button} from "../components/Button";
+import {AddItemForm} from "./AddItemForm";
 
 
 type TodoListPropsType = {
@@ -15,44 +16,27 @@ type TodoListPropsType = {
     filter:FilterValuesType
 
 }
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
 }
 
 export const TodoList: React.FC<TodoListPropsType> = (props) => {
-    const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [error, setError] = useState<string | null>(null);
-
-    const handleAddTask = () => {
-
-        if (newTaskTitle.trim() !== "") {
-            props.addTask(newTaskTitle.trim(), props.id);
-            setNewTaskTitle('');
-        } else {
-            setError("Title is required")
-        }
-    };
 
     const removeTodoList = ()=> {props.removeTodoList(props.id)}
-    const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {setNewTaskTitle(e.currentTarget.value)};
-    const onKeyPressHandler =(e:React.KeyboardEvent<HTMLInputElement>)=> {
-        setError(null)
-        if(e.key === "Enter"){handleAddTask()}
-    }
     const onAllClick = () => {props.changeFilter('all',props.id )};
     const onActiveClick = () => {props.changeFilter('active', props.id)};
     const onCompletedClick = () => {props.changeFilter('completed', props.id)};
+    const addTask = (title:string) => {
+        props.addTask(title, props.id )
+    }
 
 
     return (
         <div className="todoList">
             <h3>{props.title}<Button name={"x"} callBack={()=>removeTodoList()} /></h3>
-            <div>
-                <input value={newTaskTitle} onChange={onNewTitleChangeHandler} onKeyDown={onKeyPressHandler} className={error ? "error" : ""} />
-                <Button name="+" callBack={handleAddTask} />
-                {error && <div className={"error-message"}>{error}</div>}
+            <AddItemForm addItem={addTask} />
                 <ul>
                     {
                         props.tasks.map((task) => {
@@ -69,12 +53,13 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
                         })
                     }
                 </ul>
-                <div>
+
                     <Button name="ALL" callBack={onAllClick} className={props.filter === "all" ? "active-filter" : ""}  />
                     <Button name="Active" callBack={onActiveClick} className={props.filter === "active" ? "active-filter" : ""}/>
                     <Button name="Completed" callBack={onCompletedClick} className={props.filter === "completed" ? "active-filter" : ""}/>
                 </div>
-            </div>
-        </div>
+
     );
 };
+
+
