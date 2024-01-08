@@ -1,26 +1,68 @@
 .App {
-  padding: 30px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
 }
 
-.App > div {
-  margin-right: 50px;
-}
+
+
 .todoList {
-  border: 2px solid black;
-  background-color: cornflowerblue;
+  border: 2px solid #333;
+  background-color: #6495ED;
   padding: 15px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
+}
 
+.todoList:hover {
+  background-color: #5c8eea;
 }
+
 .error {
-  border: 1px solid red;
+  border: 2px solid #FF4500;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #FF6347;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out;
 }
+
+.error:hover {
+  background-color: #FF5733;
+}
+
 .error-message {
-  color: red;
+  color: #FF4500;
 }
+
 .active-filter {
-  background-color: mediumaquamarine;
+  background-color: #66CDAA;
+  color: #FFF;
+  padding: 8px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
 }
+
+.active-filter:hover {
+  background-color: #458B74;
+}
+
 .is-done {
-  opacity: 0.5;
+  opacity: 0.7;
+  text-decoration: line-through;
+  color: #777;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.is-done:hover {
+  opacity: 1;
 }
