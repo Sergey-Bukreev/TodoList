@@ -7,13 +7,13 @@ import {AddItemForm} from "./todoList/AddItemForm";
 import {CustomAppBar} from "./components/CoustomAppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
 
-type TodoListType = {
+export type TodoListType = {
     id:string
     title:string
     filter:FilterValuesType
 }
 export type FilterValuesType = "all" | "active" | "completed";
-type TasksStateType = {
+export type TasksStateType = {
     [key:string]:Array<TaskType>
 }
 const App = () => {
