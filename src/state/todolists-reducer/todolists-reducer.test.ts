@@ -33,8 +33,8 @@ test("correct todolist should be added", ()=> {
     const endState: Array<TodoListType> = todolistsReduser(startState, addTodoListAC(newTodolistTitle))
 
     expect(endState.length).toBe(3)
-    expect(endState[2].title).toBe(newTodolistTitle)
-    expect(endState[2].filter).toBe("all")
+    expect(endState[0].title).toBe(newTodolistTitle)
+    expect(endState[0].filter).toBe("all")
 })
 
 test("correct todolist should be changed its name", ()=> {
