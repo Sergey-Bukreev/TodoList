@@ -1,11 +1,11 @@
 import React, { useCallback} from 'react';
 import {FilterValuesType} from "../App";
 
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "./addItemForm/AddItemForm";
 import {EditableSpan} from "../components/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import { Delete} from "@material-ui/icons";
-import {Task} from "./Task";
+import {Task} from "./task/Task";
 
 
 
