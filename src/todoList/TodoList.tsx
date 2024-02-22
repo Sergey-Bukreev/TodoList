@@ -1,5 +1,5 @@
 import React, { useCallback} from 'react';
-import {FilterValuesType} from "../App";
+import {FilterValuesType} from "../App/App";
 
 import {AddItemForm} from "./addItemForm/AddItemForm";
 import {EditableSpan} from "../components/EditableSpan";
