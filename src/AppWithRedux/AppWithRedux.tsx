@@ -1,27 +1,9 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import '../App.css';
 import {TaskType, TodoList} from "../todoList/TodoList";
 import {AddItemForm} from "../todoList/addItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
-import {
-    addTodoListAC,
-    AddTodoListActionType,
-    changeTodoListFilterAC,
-    ChangeTodoListFilterActionType, changeTodoListTitleAC, ChangeTodoListTitleActionType,
-    removeTodoListAC,
-    RemoveTodoListActionType,
-
-} from "../state/todolists-reducer/todolists-reducer";
-import {
-    addTaskAC,
-    AddTaskActionType, changeTaskStatusAC, ChangeTaskStatusActionType, changeTaskTitleAC, ChangeTaskTitleActionType,
-    removeTaskAC,
-    RemoveTaskActionType,
-
-} from "../state/tasks-reducer/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../state/store";
 import {useAppWithRedux} from "./hooks/useAppWithRedux";
 
 export type TodoListType = {
