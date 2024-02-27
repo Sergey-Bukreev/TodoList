@@ -1,23 +1,41 @@
 import {useState} from "react";
 import {todoId, todoId2} from "../id-utils";
 import {v1} from "uuid";
-import {TasksStateType, TodoListType} from "../App";
-import {TaskType} from "../../todoList/TodoList";
+import {TasksStateType} from "../App";
+import {TaskPriorities, TaskStatuses, TaskType} from "../../api/todolists-api";
 
- export const useTasks = ()=> {
+
+export const useTasks = ()=> {
     const [tasksObj, setTasks] = useState<TasksStateType>({
         [todoId]: [
-            { id: v1(), title: "HTML&CSS", isDone: true },
-            { id: v1(), title: "JS", isDone: true },
-            { id: v1(), title: "ReactJS", isDone: false },
+            { id: v1(), title: "HTML&CSS", status:TaskStatuses.Completed,
+                todoListId:todoId, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
+            { id: v1(), title: "JS", status: TaskStatuses.Completed,
+                todoListId:todoId, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
+            { id: v1(), title: "ReactJS", status: TaskStatuses.New,
+                todoListId:todoId, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
 
         ],
         [todoId2]:[
-            { id: v1(), title: "Bread", isDone: true },
-            { id: v1(), title: "Water", isDone: true },
-            { id: v1(), title: "Fruits", isDone: false },
+            { id: v1(), title: "Bread", status:TaskStatuses.Completed,
+                todoListId:todoId2, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
+            { id: v1(), title: "Water", status:TaskStatuses.Completed,
+                todoListId:todoId2, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
+            { id: v1(), title: "Fruits", status: TaskStatuses.New,
+                todoListId:todoId2, startDate:"", deadline:"", addedDate:"",
+                description:"", order:0, priority:TaskPriorities.Low
+            },
         ]
-
     })
      const removeTask= (id:string, todoId:string)=> {
          let tasks:TaskType[] = tasksObj[todoId]
@@ -25,16 +43,19 @@ import {TaskType} from "../../todoList/TodoList";
          setTasks({...tasksObj})
      }
      const addTask = (title:string, todoId:string) => {
-         let newTask:TaskType = {id: v1(), title: title, isDone:false}
+         let newTask:TaskType = {   id: v1(), title: title, status: TaskStatuses.New,
+                                    todoListId:todoId2, startDate:"", deadline:"", addedDate:"",
+                                    description:"", order:0, priority:TaskPriorities.Low
+                                }
          let tasks:TaskType[] = tasksObj[todoId]
          tasksObj[todoId]= [newTask, ...tasks]
          setTasks({...tasksObj})
      }
-     const changeStatus = (taskId: string, isDone: boolean, todoId:string) => {
+     const changeStatus = (taskId: string, status:TaskStatuses, todoId:string) => {
          let tasks:TaskType[] = tasksObj[todoId]
          let task:TaskType | undefined  = tasks.find((task) => task.id === taskId);
          if (task) {
-             task.isDone = isDone
+             task.status = status
 
              setTasks({...tasksObj});
          }

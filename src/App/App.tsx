@@ -1,16 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../App.css';
-import {TaskType, TodoList} from "../todoList/TodoList";
+import {TodoList} from "../todoList/TodoList";
 import {AddItemForm} from "../todoList/addItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
 import {useTodolists} from "./hooks/useTodolists";
 import {useTasks} from "./hooks/useTasks";
-export type TodoListType = {
-    id:string
-    title:string
-    filter:FilterValuesType
-}
+import {TaskStatuses, TaskType} from "../api/todolists-api";
+
 export type FilterValuesType = "all" | "active" | "completed";
 export type TasksStateType = { [key:string]:Array<TaskType> }
 
@@ -43,8 +40,8 @@ const App = () => {
                         {
                             todoLists.map((todoList)=>{
                                 let tasksForTodolist = tasksObj[todoList.id];
-                                if (todoList.filter === "active") {tasksForTodolist = tasksObj[todoList.id].filter(task => !task.isDone);}
-                                if (todoList.filter === "completed") {tasksForTodolist = tasksObj[todoList.id].filter(task => task.isDone);}
+                                if (todoList.filter === "active") {tasksForTodolist = tasksObj[todoList.id].filter(task => task.status === TaskStatuses.New);}
+                                if (todoList.filter === "completed") {tasksForTodolist = tasksObj[todoList.id].filter(task => task.status === TaskStatuses.Completed);}
 
                                 return(<Grid item>
                                         <Paper style={{padding:"10px"}}>
