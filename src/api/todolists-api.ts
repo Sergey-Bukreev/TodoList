@@ -1,5 +1,4 @@
 import axios, {AxiosInstance} from "axios";
-import {string} from "prop-types";
 import {TodoListDomaineType} from "../state/todolists-reducer/todolists-reducer";
 export enum TaskStatuses {
     New = 0,

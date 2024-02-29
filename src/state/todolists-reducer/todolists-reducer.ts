@@ -1,12 +1,14 @@
 
 import {v1} from "uuid";
-import {TodoListType} from "../../api/todolists-api";
+import {todoListsAPI, TodoListType} from "../../api/todolists-api";
+import {Dispatch} from "redux";
 
 export type RemoveTodoListActionType ={ type:"REMOVE-TODOLIST", id: string }
 export type AddTodoListActionType ={ type:"ADD-TODOLIST", title:string, todolistId:string}
 export type ChangeTodoListTitleActionType = { type:"CHANGE-TODOLIST-TITLE", id: string, title:string }
 export type ChangeTodoListFilterActionType = { type:"CHANGE-TODOLIST-FILTER", id: string, filter:FilterValuesType }
-export type ActionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListTitleActionType | ChangeTodoListFilterActionType
+export type SetTodoListsType = {type:"SET-TODOLISTS", todoLists:TodoListType[]}
+export type ActionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListTitleActionType | ChangeTodoListFilterActionType | SetTodoListsType
 export type FilterValuesType = "all" | "active" | "completed"
 export type TodoListDomaineType = TodoListType & {filter:FilterValuesType}
 export let todoId:string = v1()
@@ -39,6 +41,12 @@ export const todolistsReduser = (state:Array<TodoListDomaineType> = initialState
             return [...state]
         }
 
+        case "SET-TODOLISTS": {
+            return action.todoLists.map(todolist => {
+                return {...todolist, filter:"all"}
+            })
+        }
+
         default:
             return state
     }
@@ -54,4 +62,17 @@ export const changeTodoListTitleAC = ( id:string, title:string):ChangeTodoListTi
 }
 export const changeTodoListFilterAC = (id:string, filter:FilterValuesType):ChangeTodoListFilterActionType => {
     return {type:"CHANGE-TODOLIST-FILTER",id:id, filter:filter}
+}
+export const setTodoListsAC = (todoLists:TodoListType[]):SetTodoListsType => {
+    return {type:"SET-TODOLISTS", todoLists:todoLists}
+}
+
+export const fetchTodoListsTC = () => {
+    return ( (dispatch:Dispatch) => {
+                    todoListsAPI.getTodoLists()
+                     .then((response)=> {
+                    dispatch(setTodoListsAC(response.data))
+                })
+        }
+    )
 }

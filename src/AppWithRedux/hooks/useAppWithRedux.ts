@@ -5,9 +5,15 @@ import {
     addTodoListAC,
     AddTodoListActionType,
     changeTodoListFilterAC,
-    ChangeTodoListFilterActionType, changeTodoListTitleAC, ChangeTodoListTitleActionType, FilterValuesType,
+    ChangeTodoListFilterActionType,
+    changeTodoListTitleAC,
+    ChangeTodoListTitleActionType,
+    fetchTodoListsTC,
+    FilterValuesType,
     removeTodoListAC,
-    RemoveTodoListActionType, TodoListDomaineType
+    RemoveTodoListActionType,
+
+    TodoListDomaineType
 } from "../../state/todolists-reducer/todolists-reducer";
 import {
     addTaskAC,
@@ -16,7 +22,7 @@ import {
     RemoveTaskActionType
 } from "../../state/tasks-reducer/tasks-reducer";
 import { TasksStateType} from "../AppWithRedux";
-import {TaskStatuses} from "../../api/todolists-api";
+import {TaskStatuses, TodoListType} from "../../api/todolists-api";
 
 export const useAppWithRedux = ()=> {
     const dispatch = useDispatch()
@@ -56,8 +62,11 @@ export const useAppWithRedux = ()=> {
         const action:AddTodoListActionType = addTodoListAC(title)
         dispatch(action)
     }, [dispatch])
+    const fetchTodoLists = ()=> {
+        dispatch(fetchTodoListsTC())
+    }
     return {todolists, tasks, addTodolist,
             removeTodoList, changeTodolistTitle, changeTaskTitle,
             changeStatus, changeFilter, addTask,
-            removeTask }
+            removeTask, fetchTodoLists}
 }

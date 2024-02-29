@@ -1,17 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../App.css';
-
 import {AddItemForm} from "../todoList/addItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
 import {useAppWithRedux} from "./hooks/useAppWithRedux";
-import {TodoListDomaineType} from "../state/todolists-reducer/todolists-reducer";
+import { TodoListDomaineType} from "../state/todolists-reducer/todolists-reducer";
 import {TaskType} from "../api/todolists-api";
 import {TodoList} from "../todoList/TodoList";
-
-
-
-
 
 export type TasksStateType = {
     [key:string]:Array<TaskType>
@@ -20,10 +15,14 @@ const AppWithReducers = () => {
 
 const {todolists, tasks, addTodolist,
     removeTodoList, changeTodolistTitle, changeTaskTitle,
-    changeStatus, changeFilter, addTask, removeTask
+    changeStatus, changeFilter, addTask, removeTask, fetchTodoLists
 } = useAppWithRedux()
 
-    return (
+    useEffect(() => {
+        fetchTodoLists()
+    }, []);
+
+return (
         <div className="App">
             <CustomAppBar/>
             <Container>

@@ -1,11 +1,18 @@
 import {v1} from "uuid";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasks-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    setTasksAC, SetTasksActionType,
+    tasksReducer
+} from "./tasks-reducer";
 import {TasksStateType} from "../../App/App";
 import {
     addTodoListAC,
     AddTodoListActionType,
     removeTodoListAC,
-    RemoveTodoListActionType
+    RemoveTodoListActionType, setTodoListsAC, SetTodoListsType
 } from "../todolists-reducer/todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
 
@@ -126,3 +133,20 @@ test("property with todolist should be deleted", ()=> {
     expect(endState[todoId2]).toBeUndefined()
 
 })
+
+test("empty arrays should be added when we set todolists", ()=> {
+    /// Тест Падает потому что перед каждым тестом заданно состояние которое не соотвктсвует
+    /// состоянию данного теста. Для исправления нужно адаптировать каждый тест отдельно
+    const action:SetTodoListsType = setTodoListsAC([
+        {id: todoId, title: "What to learn", addedDate:"", order:1},
+        {id: todoId2, title: "What to buy", addedDate:"", order:1}
+    ])
+    const endState = tasksReducer({}, action)
+    const keys = Object.keys(endState)
+
+    expect(keys.length).toBe(2)
+    expect(endState["1"]).toStrictEqual([])
+    expect(endState["2"]).toStrictEqual([])
+
+})
+
