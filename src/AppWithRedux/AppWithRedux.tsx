@@ -1,66 +1,32 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import '../App.css';
-import {AddItemForm} from "../todoList/addItemForm/AddItemForm";
+import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
-import {Container, Grid, Paper} from "@material-ui/core";
-import {useAppWithRedux} from "./hooks/useAppWithRedux";
-import { TodoListDomaineType} from "../state/todolists-reducer/todolists-reducer";
-import {TaskType} from "../api/todolists-api";
-import {TodoList} from "../todoList/TodoList";
+import {Container, Grid} from "@material-ui/core";
+import {useAppWithRedux} from "../hooks/useAppWithRedux";
 
-export type TasksStateType = {
-    [key:string]:Array<TaskType>
-}
+import {TodoListsList} from "../features/TodolistsList/TodoListsList";
+
+
 const AppWithReducers = () => {
 
-const {todolists, tasks, addTodolist,
-    removeTodoList, changeTodolistTitle, changeTaskTitle,
-    changeStatus, changeFilter, addTask, removeTask, fetchTodoLists
-} = useAppWithRedux()
+    const { addTodolist} = useAppWithRedux()
 
-    useEffect(() => {
-        fetchTodoLists()
-    }, []);
-
-return (
-        <div className="App">
-            <CustomAppBar/>
-            <Container>
-                <Grid container style={{padding:"20px"}}>
-                    <AddItemForm addItem={addTodolist} />
-                </Grid>
-                <Grid container spacing={3}>
-                    {
-                        todolists.map((todoList:TodoListDomaineType)=>{
-                            let tasksForTodolist:TaskType[] = tasks[todoList.id];
+    return (
+            <div className="App">
+                <CustomAppBar/>
+                <Container>
+                    <Grid container style={{padding:"20px"}}>
+                        <AddItemForm addItem={addTodolist} />
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <TodoListsList />
+                    </Grid>
 
 
-                            return(<Grid item>
-                                    <Paper style={{padding:"10px"}}>
-                                        <TodoList   key={todoList.id}
-                                                    id={todoList.id}
-                                                    title={todoList.title}
-                                                    tasks={tasksForTodolist}
-                                                    removeTodoList={removeTodoList}
-                                                    removeTask={removeTask}
-                                                    changeFilter={changeFilter}
-                                                    addTask={addTask}
-                                                    changeStatus={changeStatus}
-                                                    changeTaskTitle={changeTaskTitle}
-                                                    changeTodolistTitle={changeTodolistTitle}
-                                                    filter={todoList.filter}
-                                        />
-                                    </Paper>
-                                </Grid>
-                            )
-                        })
-                    }
-                </Grid>
-
-
-            </Container>
-        </div>
-    );
-}
+                </Container>
+            </div>
+        );
+    }
 
 export default AppWithReducers;

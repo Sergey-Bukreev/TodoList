@@ -1,11 +1,11 @@
 import React from 'react';
 import '../App.css';
-import {TodoList} from "../todoList/TodoList";
-import {AddItemForm} from "../todoList/addItemForm/AddItemForm";
+import {TodoList} from "../features/TodolistsList/Todolist/TodoList";
+import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
 import {Container, Grid, Paper} from "@material-ui/core";
-import {useTodolists} from "./hooks/useTodolists";
-import {useTasks} from "./hooks/useTasks";
+import {useTodolists} from "../hooks/useTodolists";
+import {useTasks} from "../hooks/useTasks";
 import {TaskStatuses, TaskType} from "../api/todolists-api";
 
 export type FilterValuesType = "all" | "active" | "completed";

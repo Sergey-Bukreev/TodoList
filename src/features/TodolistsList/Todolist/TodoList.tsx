@@ -1,31 +1,18 @@
 import React, {useCallback, useEffect} from 'react';
-import {FilterValuesType} from "../App/App";
-import {AddItemForm} from "./addItemForm/AddItemForm";
-import {EditableSpan} from "../components/EditableSpan";
+import {FilterValuesType} from "../../../App/App";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import { Delete} from "@material-ui/icons";
-import {Task} from "./task/Task";
-import {TaskStatuses, TaskType} from "../api/todolists-api";
+import {Task} from "./Task/Task";
+import {TaskStatuses, TaskType} from "../../../api/todolists-api";
 import {useDispatch} from "react-redux";
-import {fetchTasksTC} from "../state/tasks-reducer/tasks-reducer";
-
-type TodoListPropsType = {
-    id:string
-    title: string
-    tasks: Array<TaskType>
-    removeTodoList:(id:string)=>void
-    changeTodolistTitle:(id:string, newValue:string)=> void
-    removeTask: (taskId: string, todoId:string) => void
-    changeFilter: (value: FilterValuesType, todoListId:string) => void
-    addTask: (title: string, todoId:string) => void
-    changeStatus:(taskId:string, status:TaskStatuses, todoId:string)=>void
-    changeTaskTitle: (taskId:string, todoListId:string, newValue:string) => void
-    filter:FilterValuesType
-}
+import {fetchTasksTC} from "../../../state/tasks-reducer/tasks-reducer";
 
 export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(fetchTasksTC(props.id))
     }, []);
@@ -54,9 +41,9 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                                                                    task={task} todolistId={props.id}
                                                                    removeTask={props.removeTask}
                                                                    changeTaskTitle={props.changeTaskTitle}
-                                                                   changeStatus={props.changeStatus}/>)}
+                                                                   changeStatus={props.changeStatus}
+                                                                />)}
                 </div>
-
                     <Button  onClick={onAllClick} variant={props.filter === "all" ? "contained" : "text"} color={"primary"} >All</Button>
                     <Button  onClick={onActiveClick} variant={props.filter === "active" ? "contained" : "text"} color={"primary"} >Active</Button>
                     <Button  onClick={onCompletedClick} variant={props.filter === "completed" ? "contained" : "text"} color={"primary"} >Completed</Button>
@@ -65,4 +52,16 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
     );
 });
 
-
+type TodoListPropsType = {
+    id:string
+    title: string
+    tasks: Array<TaskType>
+    removeTodoList:(id:string)=>void
+    changeTodolistTitle:(id:string, newValue:string)=> void
+    removeTask: (taskId: string, todoId:string) => void
+    changeFilter: (value: FilterValuesType, todoListId:string) => void
+    addTask: (title: string, todoId:string) => void
+    changeStatus:(taskId:string, status:TaskStatuses, todoId:string)=>void
+    changeTaskTitle: (taskId:string, todoListId:string, newValue:string) => void
+    filter:FilterValuesType
+}

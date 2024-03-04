@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {todoId, todoId2} from "../id-utils";
+import {todoId, todoId2} from "../App/id-utils";
 import {v1} from "uuid";
-import {TasksStateType} from "../App";
-import {TaskPriorities, TaskStatuses, TaskType} from "../../api/todolists-api";
+import {TasksStateType} from "../App/App";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolists-api";
 
 
 export const useTasks = ()=> {

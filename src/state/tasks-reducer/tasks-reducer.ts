@@ -1,45 +1,12 @@
-import { TasksStateType } from "../../App/App";
+
 import {v1} from "uuid";
-import {
-    AddTodoListActionType,
-    RemoveTodoListActionType,
-    SetTodoListsType,
-    todoId,
-    todoId2
-} from "../todolists-reducer/todolists-reducer";
+import {AddTodoListActionType, RemoveTodoListActionType, SetTodoListActionType, todoId, todoId2} from "../todolists-reducer/todolists-reducer";
 import {TaskPriorities, TaskStatuses, TaskType, todoListsAPI, UpdateTaskType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {AppRootState} from "../store";
 
-export type RemoveTaskActionType = {
-    type: "REMOVE-TASK";
-    id: string;
-    todoId: string;
-};
-export type AddTaskActionType = {
-    type:"ADD-TASK"
-   task:TaskType
-}
-export type ChangeTaskStatusActionType = {
-    type:"CHANGE-TASK-STATUS"
-    todoId:string
-    id:string
-    status:TaskStatuses
-}
-export type ChangeTaskTitleActionType = {
-    type:"CHANGE-TASK-TITLE"
-    todoId: string
-    id:string
-    title:string
-}
-export type SetTasksActionType = {
-    type: "SET-TASKS"
-    todolistId: string
-    tasks:TaskType[]
-}
-export type ActionType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType | ChangeTaskTitleActionType
-                        | AddTodoListActionType | RemoveTodoListActionType | SetTodoListsType | SetTasksActionType ;
 
+// state
 const initialState:TasksStateType = {
     [todoId]: [
         { id: v1(), title: "HTML&CSS", status:TaskStatuses.Completed,
@@ -72,55 +39,33 @@ const initialState:TasksStateType = {
     ]
 }
 
-export const removeTaskAC = (todoId: string, id: string): RemoveTaskActionType => {
-    return { type: "REMOVE-TASK", todoId, id };
-};
-export const addTaskAC = (task:TaskType):AddTaskActionType => {
-    return {type:"ADD-TASK", task}
-}
-export const changeTaskStatusAC = (todoId:string, id:string, status:TaskStatuses):ChangeTaskStatusActionType => {
-    return {type:"CHANGE-TASK-STATUS", todoId, id, status}
-}
-export const changeTaskTitleAC = (todoId:string, id:string, title:string):ChangeTaskTitleActionType => {
-    return {type:"CHANGE-TASK-TITLE", todoId, id, title}
-}
-export const setTasksAC = (todolistId:string, tasks:TaskType[]):SetTasksActionType => {
-    return {type:"SET-TASKS", todolistId, tasks}
-}
-export const  fetchTasksTC = (todolistId:string)=> {
-    return (
-        (dispatch:Dispatch)=> {
+// action
+export const removeTaskAC = (todoId: string, id: string) =>({ type: "REMOVE-TASK", todoId, id } as const)
+export const addTaskAC = (task:TaskType) => ({type:"ADD-TASK", task} as const)
+export const changeTaskStatusAC = (todoId:string, id:string, status:TaskStatuses) => ({type:"CHANGE-TASK-STATUS", todoId, id, status} as const)
+export const changeTaskTitleAC = (todoId:string, id:string, title:string) =>({type:"CHANGE-TASK-TITLE", todoId, id, title} as const)
+export const setTasksAC = (todolistId:string, tasks:TaskType[]) => ({type:"SET-TASKS", todolistId, tasks} as const)
+
+//thunk
+export const  fetchTasksTC = (todolistId:string)=> (dispatch:Dispatch<ActionType>)=> {
             todoListsAPI.getTasks(todolistId)
                 .then((response)=> {
                     dispatch(setTasksAC(todolistId, response.data.items ))
                 })
         }
-    )
-}
-export const removeTaskTC = (todoId:string, id:string) => {
-    return (
-        (dispatch:Dispatch)=> {
+export const removeTaskTC = (todoId:string, id:string) => (dispatch:Dispatch<ActionType>)=> {
            todoListsAPI.deleteTask(todoId, id)
                .then((response) => {
                    dispatch(removeTaskAC(todoId, id))
                })
-
         }
-    )
-}
-export const addTaskTC = (todoListId:string, title:string) => {
-    return (
-        (dispatch:Dispatch)=> {
+export const addTaskTC = (todoListId:string, title:string) => (dispatch:Dispatch<ActionType>)=> {
             todoListsAPI.createTask(todoListId, title)
                 .then((response)=> {
                     dispatch(addTaskAC(response.data.data.item))
                 })
         }
-    )
-}
-export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses) => {
-    return (
-        (dispatch:Dispatch, getState: ()=> AppRootState)=> {
+export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses) => (dispatch:Dispatch<ActionType>, getState: ()=> AppRootState)=> {
           const state = getState()
            const task = state.tasks[todoId].find(t => t.id === id)
             if(!task) {
@@ -140,11 +85,7 @@ export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses
                     dispatch(changeTaskStatusAC(todoId, id, status))
                 })
         }
-    )
-}
-export const updateTaskTitleTC = (todoId:string, id:string, title:string)=> {
-    return (
-        (dispatch:Dispatch, getState: ()=> AppRootState)=> {
+export const updateTaskTitleTC = (todoId:string, id:string, title:string)=> (dispatch:Dispatch, getState: ()=> AppRootState)=> {
             const state = getState()
             const task = state.tasks[todoId].find(t => t.id === id)
             if(!task) {
@@ -164,40 +105,24 @@ export const updateTaskTitleTC = (todoId:string, id:string, title:string)=> {
                     dispatch(changeTaskTitleAC(todoId, id, title))
                 })
         }
-    )
-}
 
+// reducer
 export const tasksReducer = (tasks: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
         case "REMOVE-TASK":
-            return {
-                ...tasks,
-                [action.todoId]: tasks[action.todoId].filter(task => task.id !== action.id),
-            }
+            return {...tasks, [action.todoId]: tasks[action.todoId].filter(task => task.id !== action.id),}
+
         case "ADD-TASK":
-                return  {
-                    ...tasks,
-                    [action.task.todoListId]: [...tasks[action.task.todoListId], action.task
-                                    ]
-                }
+                return  {...tasks, [action.task.todoListId]: [...tasks[action.task.todoListId], action.task] }
+
         case "CHANGE-TASK-STATUS":
-            return {
-                ...tasks,
-                [action.todoId]: tasks[action.todoId].map(task =>
-                    task.id === action.id ? { ...task, status: action.status } : task
-                ),
-            }
+            return {...tasks, [action.todoId]: tasks[action.todoId].map(task => task.id === action.id ? { ...task, status: action.status } : task) }
+
         case "CHANGE-TASK-TITLE":
-            return  {
-                ...tasks,
-                [action.todoId]: tasks[action.todoId].map(task =>
-                task.id === action.id ? {...task, title:action.title} : task
-                )
-            }
+            return  {...tasks, [action.todoId]: tasks[action.todoId].map(task => task.id === action.id ? {...task, title:action.title} : task)}
+
         case "ADD-TODOLIST":
-        const tasksCopy = {...tasks}
-            tasksCopy[action.todoList.id] = []
-            return tasksCopy
+            return {...tasks, [action.todoList.id]: [] }
 
         case "REMOVE-TODOLIST":
             const stateCopy = {...tasks}
@@ -211,13 +136,24 @@ export const tasksReducer = (tasks: TasksStateType = initialState, action: Actio
             })
             return stateCopy
         }
-        case "SET-TASKS": {
-            const stateCopy = {...tasks}
-            stateCopy[action.todolistId] = action.tasks
-            return stateCopy
-        }
+        case "SET-TASKS":
+            return {...tasks, [action.todolistId] : action.tasks}
 
         default:
             return tasks
     }
 };
+
+// types
+export type ActionType =
+    | ReturnType<typeof removeTaskAC>
+    | ReturnType<typeof addTaskAC>
+    | ReturnType<typeof changeTaskStatusAC>
+    | ReturnType<typeof changeTaskTitleAC>
+    | AddTodoListActionType
+    | RemoveTodoListActionType
+    | SetTodoListActionType
+    | ReturnType<typeof setTasksAC>
+export type TasksStateType = {
+    [key:string]:Array<TaskType>
+}
