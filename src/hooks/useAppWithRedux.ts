@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../state/store";
+import {AppRootStateType} from "../state/store";
 import {useCallback} from "react";
 import {
     addTooListTC,
@@ -22,8 +22,8 @@ import {TaskStatuses} from "../api/todolists-api";
 
 export const useAppWithRedux = ()=> {
     const dispatch = useDispatch()
-    const todolists:TodoListDomaineType[] = useSelector<AppRootState, TodoListDomaineType[]>(state => state.todolists)
-    const tasks:TasksStateType = useSelector<AppRootState, TasksStateType>(state => state.tasks)
+    const todolists:TodoListDomaineType[] = useSelector<AppRootStateType, TodoListDomaineType[]>(state => state.todolists)
+    const tasks:TasksStateType = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     const removeTodoList =  useCallback((todoId:string)=> {
         dispatch(removeTodoListTC(todoId))

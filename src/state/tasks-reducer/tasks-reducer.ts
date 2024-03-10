@@ -3,7 +3,8 @@ import {v1} from "uuid";
 import {AddTodoListActionType, RemoveTodoListActionType, SetTodoListActionType, todoId, todoId2} from "../todolists-reducer/todolists-reducer";
 import {TaskPriorities, TaskStatuses, TaskType, todoListsAPI, UpdateTaskType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
-import {AppRootState} from "../store";
+import {AppRootStateType} from "../store";
+import {setError, SetErrorActionType, setStatus, SetStatusActionType} from "../app-reducer/app-reducer";
 
 
 // state
@@ -47,10 +48,12 @@ export const changeTaskTitleAC = (todoId:string, id:string, title:string) =>({ty
 export const setTasksAC = (todolistId:string, tasks:TaskType[]) => ({type:"SET-TASKS", todolistId, tasks} as const)
 
 //thunk
-export const  fetchTasksTC = (todolistId:string)=> (dispatch:Dispatch<ActionType>)=> {
-            todoListsAPI.getTasks(todolistId)
+export const  fetchTasksTC = (todolistId:string)=> (dispatch:Dispatch<ActionType | SetStatusActionType>)=> {
+    dispatch(setStatus("loading"))
+    todoListsAPI.getTasks(todolistId)
                 .then((response)=> {
                     dispatch(setTasksAC(todolistId, response.data.items ))
+                    dispatch(setStatus("succeeded"))
                 })
         }
 export const removeTaskTC = (todoId:string, id:string) => (dispatch:Dispatch<ActionType>)=> {
@@ -59,13 +62,25 @@ export const removeTaskTC = (todoId:string, id:string) => (dispatch:Dispatch<Act
                    dispatch(removeTaskAC(todoId, id))
                })
         }
-export const addTaskTC = (todoListId:string, title:string) => (dispatch:Dispatch<ActionType>)=> {
-            todoListsAPI.createTask(todoListId, title)
+export const addTaskTC = (todoListId:string, title:string) => (dispatch:Dispatch<ActionType | SetErrorActionType | SetStatusActionType> )=> {
+    dispatch(setStatus("loading"))
+    todoListsAPI.createTask(todoListId, title)
                 .then((response)=> {
-                    dispatch(addTaskAC(response.data.data.item))
+                    if(response.data.resultCode === 0) {
+                        dispatch(addTaskAC(response.data.data.item))
+                        dispatch(setStatus("succeeded"))
+                    } else {
+                        if(response.data.messages.length) {
+                            dispatch(setError(response.data.messages[0]))
+                        } else {
+                            dispatch(setError("Some error occurred"))
+                            dispatch(setStatus("failed"))
+                        }
+                    }
+
                 })
         }
-export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses) => (dispatch:Dispatch<ActionType>, getState: ()=> AppRootState)=> {
+export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses) => (dispatch:Dispatch<ActionType>, getState: ()=> AppRootStateType)=> {
           const state = getState()
            const task = state.tasks[todoId].find(t => t.id === id)
             if(!task) {
@@ -85,7 +100,7 @@ export const updateTaskStatusTC = (todoId:string, id:string, status:TaskStatuses
                     dispatch(changeTaskStatusAC(todoId, id, status))
                 })
         }
-export const updateTaskTitleTC = (todoId:string, id:string, title:string)=> (dispatch:Dispatch, getState: ()=> AppRootState)=> {
+export const updateTaskTitleTC = (todoId:string, id:string, title:string)=> (dispatch:Dispatch, getState: ()=> AppRootStateType)=> {
             const state = getState()
             const task = state.tasks[todoId].find(t => t.id === id)
             if(!task) {
