@@ -6,20 +6,21 @@ import {useAddItemForm} from "../../hooks/useAddItemForm";
 
 type AddItemFormPropsType = {
     addItem:(title: string, ) => void
+    disabled?:boolean
 
 }
-export const AddItemForm:React.FC<AddItemFormPropsType> = React.memo((props:AddItemFormPropsType) => {
+export const AddItemForm:React.FC<AddItemFormPropsType> = React.memo(({addItem, disabled = false}:AddItemFormPropsType) => {
     const {newTaskTitle,
             error,
             onNewTitleChangeHandler,
             onKeyPressHandler,
             handleAddItem
-         } = useAddItemForm(props.addItem)
+         } = useAddItemForm(addItem)
 
     return (
         <div>
-            <TextField value={newTaskTitle} onChange={onNewTitleChangeHandler} onKeyDown={onKeyPressHandler} error={!!error} variant={"outlined"} helperText={error} />
-            <IconButton onClick={handleAddItem}  color={"primary"}>
+            <TextField value={newTaskTitle} onChange={onNewTitleChangeHandler} onKeyDown={onKeyPressHandler} error={!!error} variant={"outlined"} helperText={error}  disabled={disabled}/>
+            <IconButton onClick={handleAddItem}  color={"primary"} disabled={disabled}>
                 <ControlPoint/>
             </IconButton>
         </div>

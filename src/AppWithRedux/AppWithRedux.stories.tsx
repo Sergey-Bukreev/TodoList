@@ -8,5 +8,5 @@ export default {
 }
 
 export const AppWithReduxBaseExample = () => {
-    return <AppWithRedux />
+    return <AppWithRedux demo={true}/>
 }

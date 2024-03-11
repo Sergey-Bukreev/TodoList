@@ -46,8 +46,8 @@ const App = () => {
                                 return(<Grid item>
                                         <Paper style={{padding:"10px"}}>
                                     <TodoList   key={todoList.id}
-                                                id={todoList.id}
-                                                title={todoList.title}
+                                                todolist={todoList}
+
                                                 tasks={tasksForTodolist}
                                                 removeTodoList={removeTodoList}
                                                 removeTask={removeTask}
@@ -56,7 +56,7 @@ const App = () => {
                                                 changeStatus={changeStatus}
                                                 changeTaskTitle={changeTaskTitle}
                                                 changeTodolistTitle={changeTodolistTitle}
-                                                filter={todoList.filter}
+
                                     />
                                         </Paper>
                                     </Grid>

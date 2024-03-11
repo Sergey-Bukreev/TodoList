@@ -7,8 +7,10 @@ import {useAppWithRedux} from "../hooks/useAppWithRedux";
 
 import {TodoListsList} from "../features/TodolistsList/TodoListsList";
 
-
-const AppWithReducers = () => {
+type PropsType = {
+    demo?: boolean
+}
+const AppWithReducers = ({demo = false}:PropsType) => {
 
     const { addTodolist} = useAppWithRedux()
 
@@ -20,7 +22,7 @@ const AppWithReducers = () => {
                         <AddItemForm addItem={addTodolist} />
                     </Grid>
                     <Grid container spacing={3}>
-                        <TodoListsList />
+                        <TodoListsList demo={demo}/>
                     </Grid>
 
 
