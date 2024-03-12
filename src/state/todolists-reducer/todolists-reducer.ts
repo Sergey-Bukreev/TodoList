@@ -3,6 +3,7 @@ import {v1} from "uuid";
 import {todoListsAPI, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
 import {RequestStatusType, setAppStatus, SetStatusActionType} from "../app-reducer/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/handleErrorUtils";
 
 //state
 export let todoId:string = v1()
@@ -36,20 +37,38 @@ export const removeTodoListTC = (todoListId:string) => (dispatch:Dispatch<Action
                 .then((response)=> {
                     dispatch(removeTodoListAC(todoListId))
                 })
+                .catch((error)=> {
+                    handleServerNetworkError(error, dispatch)
+                })
         }
 export const addTooListTC = (title:string) => (dispatch:Dispatch<ActionType | SetStatusActionType> ) => {
             dispatch(setAppStatus("loading"))
             todoListsAPI.createTodoList(title)
                 .then((response)=>{
-                    dispatch(addTodoListAC(response.data.data.item))
-                    dispatch(setAppStatus("succeeded"))
+                   if(response.data.resultCode === 0) {
+                       dispatch(addTodoListAC(response.data.data.item))
+                       dispatch(setAppStatus("succeeded"))
+                   } else {
+                       handleServerAppError(response.data, dispatch)
+                   }
+
+                })
+                .catch((error)=> {
+                    handleServerNetworkError(error, dispatch)
                 })
 
         }
-export const updateTodoListTitleTC =(id:string, title:string) => (dispatch:Dispatch<ActionType>) => {
+export const updateTodoListTitleTC =(id:string, title:string) => (dispatch:Dispatch<ActionType | SetStatusActionType>) => {
+            dispatch(setAppStatus("loading"))
             todoListsAPI.updateTodolisttitle(id, title)
                 .then((response)=> {
-                    dispatch(changeTodoListTitleAC(id,title))
+                   if(response.data.resultCode === 0) {
+                       dispatch(changeTodoListTitleAC(id,title))
+                       dispatch(setAppStatus("succeeded"))
+                   } else {
+                       handleServerAppError(response.data, dispatch)
+                   }
+
                 })
         }
 
