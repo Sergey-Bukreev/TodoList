@@ -45,7 +45,10 @@ const initialGlobalState:AppRootStateType = {
 app: {
     status: "idle",
         error: null
-}
+},
+    auth:{
+        isLoggedIn:false
+    }
 }
 export const storyBookStore = createStore(rootReducer,initialGlobalState, applyMiddleware(thunk))
 export const ReduxStoreProviderDecorator = (storyFn:any) =>{

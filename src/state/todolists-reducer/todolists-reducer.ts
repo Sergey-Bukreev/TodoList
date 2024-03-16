@@ -2,7 +2,7 @@
 import {v1} from "uuid";
 import {todoListsAPI, TodoListType} from "../../api/todolists-api";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppStatus, SetStatusActionType} from "../app-reducer/app-reducer";
+import {RequestStatusType, setAppStatus, SetErrorActionType, SetStatusActionType} from "../app-reducer/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/handleErrorUtils";
 
 //state
@@ -22,12 +22,15 @@ export const setTodoListsAC = (todoLists:TodoListType[]) => ({type:"SET-TODOLIST
 export const changeTodoListEntityStatusAC = (id:string, status:RequestStatusType) => ({type:"CHANGE-TODOLIST-ENTITY-STATUS", id, status} as const)
 
 // thunk
-export const fetchTodoListsTC = () =>  (dispatch:Dispatch<ActionType | SetStatusActionType>) => {
+export const fetchTodoListsTC = () =>  (dispatch:Dispatch<ActionType | SetStatusActionType | SetErrorActionType>) => {
     dispatch(setAppStatus("loading"))
     todoListsAPI.getTodoLists()
                 .then((response)=> {
                     dispatch(setTodoListsAC(response.data))
                     dispatch(setAppStatus("succeeded"))
+                })
+                .catch((error)=> {
+                    handleServerNetworkError(error, dispatch)
                 })
         }
 export const removeTodoListTC = (todoListId:string) => (dispatch:Dispatch<ActionType | SetStatusActionType>) => {

@@ -3,7 +3,8 @@ let startState:InitialStateType
 beforeEach(()=> {
      startState = {
         status:"idle",
-        error:null
+        error:null,
+         initialized:false
     }
 })
 test("correct error message should be set ", ()=> {

@@ -1,5 +1,6 @@
 import axios, {AxiosInstance} from "axios";
 import {TodoListDomaineType} from "../state/todolists-reducer/todolists-reducer";
+import {number} from "prop-types";
 
 const instance:AxiosInstance = axios.create({
     baseURL:"https://social-network.samuraijs.com/api/1.1/",
@@ -34,6 +35,18 @@ export const todoListsAPI = {
     },
     updateTask(todoId:string, taskId:string, model:UpdateTaskType) {
         return instance.put<ResponseType>(`todo-lists/${todoId}/tasks/${taskId}`, model)
+    }
+}
+
+export const authAPI = {
+    login(data:LoginParamsType) {
+        return instance.post <ResponseType<{userId?:number}>>(`auth/login`, data)
+    },
+    logout(){
+        return instance.delete <ResponseType<{userId?:number}>>(`auth/login`)
+    },
+    me() {
+        return instance.get<ResponseType<{id:number, email:string, login: string}>>(`auth/me`)
     }
 }
 
@@ -87,4 +100,10 @@ export type UpdateTaskType = {
     priority: number
     startDate: string
     deadline: string
+}
+export type LoginParamsType = {
+    email:string
+    password:string
+    rememberMe:boolean
+    captcha?:string
 }

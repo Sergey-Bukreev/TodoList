@@ -1,33 +1,56 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../App.css';
 import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
-import {Container, Grid} from "@material-ui/core";
+import {CircularProgress, Container, Grid} from "@material-ui/core";
 import {useAppWithRedux} from "../hooks/useAppWithRedux";
 
 import {TodoListsList} from "../features/TodolistsList/TodoListsList";
+import { Route, Routes} from "react-router-dom";
+import {Login} from "../features/Login/Login";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../state/store";
+import {initializeAppTC} from "../state/app-reducer/app-reducer";
 
 type PropsType = {
     demo?: boolean
 }
 const AppWithReducers = ({demo = false}:PropsType) => {
+const isInitialized = useSelector<AppRootStateType, boolean>(state=> state.app.initialized)
+const dispatch = useDispatch()
 
-    const { addTodolist} = useAppWithRedux()
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, []);
+
+    if (!isInitialized) {
+    return (
+        <div style={{position:"fixed", textAlign:"center",  width:"100%", top:"40%"}} >
+            <CircularProgress />
+        </div>
+    )
+}
 
     return (
+
             <div className="App">
                 <CustomAppBar/>
                 <Container>
                     <Grid container style={{padding:"20px"}}>
-                        <AddItemForm addItem={addTodolist} />
                     </Grid>
                     <Grid container spacing={3}>
-                        <TodoListsList demo={demo}/>
+                        <Routes>
+                            <Route path={'/'} element={<TodoListsList demo={demo} />} />
+                            <Route path={'/login'} element={<Login />} />
+
+                        </Routes>
                     </Grid>
 
 
                 </Container>
             </div>
+
+
         );
     }
 
