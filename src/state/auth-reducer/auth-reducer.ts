@@ -2,6 +2,10 @@ import {Dispatch} from "redux";
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {setAppStatus, SetErrorActionType, SetStatusActionType} from "../app-reducer/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/handleErrorUtils";
+import {
+    clearTodoListDataAC,
+    ClearTodoListDataActionType
+} from "../todolists-reducer/todolists-reducer";
 
 /// STATE
 const initialState:InitialStateType = {isLoggedIn:false}
@@ -25,13 +29,14 @@ export  const loginTC = (data:LoginParamsType)=>(dispatch:Dispatch<ActionAuthTyp
             handleServerNetworkError(error, dispatch)
         })
 }
-export  const logoutTC = ()=>(dispatch:Dispatch<ActionAuthType | SetStatusActionType | SetErrorActionType>) => {
+export  const logoutTC = ()=>(dispatch:Dispatch<ActionAuthType | SetStatusActionType | SetErrorActionType | ClearTodoListDataActionType>) => {
     dispatch(setAppStatus("loading"))
     authAPI.logout()
         .then((response)=> {
             if(response.data.resultCode === 0) {
                 dispatch(setIsLoginInAC(false))
                 dispatch(setAppStatus("succeeded"))
+                dispatch(clearTodoListDataAC())
             } else {
                 handleServerAppError(response.data, dispatch)
             }
@@ -54,5 +59,6 @@ export const authReducer = (state:InitialStateType = initialState, action:Action
 
 /// TYPES
 export type SetIsLoginType = ReturnType<typeof setIsLoginInAC>
-export type ActionAuthType = SetIsLoginType
+export type ActionAuthType =    |SetIsLoginType
+
 export type InitialStateType = { isLoggedIn: boolean }

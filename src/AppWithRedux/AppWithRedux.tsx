@@ -16,7 +16,7 @@ type PropsType = {
     demo?: boolean
 }
 const AppWithReducers = ({demo = false}:PropsType) => {
-const isInitialized = useSelector<AppRootStateType, boolean>(state=> state.app.initialized)
+const  {isInitialized} = useAppWithRedux()
 const dispatch = useDispatch()
 
     useEffect(() => {

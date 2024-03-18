@@ -14,10 +14,10 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
 
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (demo ) {return}
-        dispatch(fetchTasksTC(props.todolist.id))
-    }, []);
+    // useEffect(() => {
+    //     if (demo ) {return}
+    //     dispatch(fetchTasksTC(props.todolist.id))
+    // }, []);
 
     const onAllClick = useCallback(() => {props.changeFilter('all',props.todolist.id )}, [props.changeFilter, props.todolist.id]);
     const onActiveClick = useCallback(() => {props.changeFilter('active', props.todolist.id)}, [props.changeFilter, props.todolist.id]);

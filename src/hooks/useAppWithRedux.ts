@@ -18,12 +18,16 @@ import {
 } from "../state/tasks-reducer/tasks-reducer";
 
 import {TaskStatuses} from "../api/todolists-api";
+import {RequestStatusType} from "../state/app-reducer/app-reducer";
 
 
 export const useAppWithRedux = ()=> {
     const dispatch = useDispatch()
     const todolists:TodoListDomaineType[] = useSelector<AppRootStateType, TodoListDomaineType[]>(state => state.todolists)
     const tasks:TasksStateType = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isInitialized = useSelector<AppRootStateType, boolean>(state=> state.app.initialized)
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const removeTodoList =  useCallback((todoId:string)=> {
         dispatch(removeTodoListTC(todoId))
@@ -60,5 +64,5 @@ export const useAppWithRedux = ()=> {
     return {todolists, tasks, addTodolist,
             removeTodoList, changeTodolistTitle, changeTaskTitle,
             changeStatus, changeFilter, addTask,
-            removeTask, fetchTodoLists}
+            removeTask, fetchTodoLists, isInitialized, status, isLoggedIn}
 }

@@ -14,18 +14,19 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "../../state/auth-reducer/auth-reducer";
 import {AppRootStateType} from "../../state/store";
 import {Navigate} from "react-router-dom";
+import {useAppWithRedux} from "../../hooks/useAppWithRedux";
 
 
 export const Login = () => {
 
     const dispatch = useDispatch()
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const {isLoggedIn} = useAppWithRedux()
+
     const formik = useFormik({
         validate: (values)=>{
             if(!values.email) {return {email: "Email is required"}}
             if(!values.password) {return {email: "Password is required"}}
         },
-
         initialValues:{
             email: "",
             password:"",

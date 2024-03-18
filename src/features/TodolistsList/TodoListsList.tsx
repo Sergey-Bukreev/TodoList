@@ -14,14 +14,13 @@ type PropsType = {
 export const TodoListsList:React.FC<PropsType> = ({demo = false}) => {
 
     const { todolists, tasks, removeTodoList, changeTodolistTitle,
-            changeTaskTitle, changeStatus, changeFilter, addTask, removeTask, fetchTodoLists, addTodolist} = useAppWithRedux()
+            changeTaskTitle, changeStatus, changeFilter, addTask, removeTask, fetchTodoLists, addTodolist, isLoggedIn} = useAppWithRedux()
 
     useEffect(() => {
         if(demo || !isLoggedIn) { return}
         fetchTodoLists()
     }, []);
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     if(!isLoggedIn) {
         return <Navigate to={"/login"} />
