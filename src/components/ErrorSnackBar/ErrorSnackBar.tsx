@@ -20,7 +20,7 @@ export  function ErrorSnackBar() {
         if (reason === 'clickaway') {
             return;
         }
-        dispatch(setAppError(null))
+        dispatch(setAppError({error: null}))
 
         // setOpen(false);
     };

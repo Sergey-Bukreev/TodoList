@@ -43,7 +43,7 @@ export const useAppWithRedux = ()=> {
 
     }, [dispatch])
     const changeFilter = useCallback((value:FilterValuesType, todoListId: string)=> {
-        const action = changeTodoListFilterAC(todoListId, value )
+        const action = changeTodoListFilterAC({id:todoListId, filter:value} )
         dispatch(action)
     }, [dispatch])
     const changeStatus = useCallback((taskId: string,status:TaskStatuses, todoId:string) => {
