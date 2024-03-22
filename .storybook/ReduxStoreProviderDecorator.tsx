@@ -1,10 +1,10 @@
 import {Provider} from "react-redux";
 import {AppRootStateType, rootReducer} from "../src/state/store";
-import {applyMiddleware, createStore} from "redux";
-import thunk from "redux-thunk";
-import {todoId, todoId2} from "../src/state/todolists-reducer/todolists-reducer";
 import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses} from "../src/api/todolists-api";
+import {todoId, todoId2} from "../src/App/id-utils";
+import {configureStore} from "@reduxjs/toolkit";
+import { HashRouter} from "react-router-dom";
 
 const initialGlobalState:AppRootStateType = {
     todolists:[
@@ -44,13 +44,21 @@ const initialGlobalState:AppRootStateType = {
 },
 app: {
     status: "idle",
-        error: null
+    error: null,
+    initialized:true
 },
     auth:{
-        isLoggedIn:false
+        isLoggedIn:true
     }
 }
-export const storyBookStore = createStore(rootReducer,initialGlobalState, applyMiddleware(thunk))
+export const storyBookStore = configureStore({
+    reducer:rootReducer,
+    preloadedState:initialGlobalState,
+    middleware:getDefaultMiddleware =>  getDefaultMiddleware({serializableCheck: false, thunk: true})
+})
 export const ReduxStoreProviderDecorator = (storyFn:any) =>{
     return <Provider store={storyBookStore}>{storyFn()}</Provider>
+}
+export const ReduxStoreBrowserRouterDecorator = (storyFn:any) =>{
+    return <HashRouter>{storyFn()}</HashRouter>
 }

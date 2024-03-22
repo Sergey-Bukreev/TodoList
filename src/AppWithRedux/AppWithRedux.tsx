@@ -1,15 +1,12 @@
 import React, {useEffect} from 'react';
 import '../App.css';
-import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import {CustomAppBar} from "../components/CoustomAppBar";
 import {CircularProgress, Container, Grid} from "@material-ui/core";
 import {useAppWithRedux} from "../hooks/useAppWithRedux";
-
 import {TodoListsList} from "../features/TodolistsList/TodoListsList";
 import { Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
+import {useDispatch} from "react-redux";
 import {initializeAppTC} from "../state/app-reducer/app-reducer";
 
 type PropsType = {
@@ -39,11 +36,10 @@ const dispatch = useDispatch()
                     <Grid container style={{padding:"20px"}}>
                     </Grid>
                     <Grid container spacing={3}>
-                        <Routes>
-                            <Route path={'/'} element={<TodoListsList demo={demo} />} />
-                            <Route path={'/login'} element={<Login />} />
-
-                        </Routes>
+                            <Routes>
+                                <Route path={'/'} element={<TodoListsList demo={demo} />} />
+                                <Route path={'/login'} element={<Login />} />
+                            </Routes>
                     </Grid>
 
 

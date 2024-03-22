@@ -59,7 +59,8 @@ test("correct task should  be removed", ()=> {
 
 test("correct task should  be added", ()=> {
 
-    let newTask:TaskType = { id: v1(), title: "NEW Task", status: TaskStatuses.New,
+    let newTask:TaskType = {
+        id: v1(), title: "NewTask", status: TaskStatuses.New,
         todoListId:todoId2, startDate:"", deadline:"", addedDate:"",
         description:"", order:0, priority:TaskPriorities.Low
     }
@@ -68,8 +69,8 @@ test("correct task should  be added", ()=> {
     expect(startState).not.toBe(endState)
     expect(startState[todoId]).toEqual(endState[todoId])
     expect(endState[todoId2]).toHaveLength(startState[todoId2].length + 1);
-    expect(endState[todoId2][3].title).toBe("NEW Task")
-    expect(endState[todoId2][3].status).toBe(TaskStatuses.New)
+    expect(endState[todoId2][0].title).toBe(newTask.title)
+    expect(endState[todoId2][0].status).toBe(TaskStatuses.New)
 
 })
 
